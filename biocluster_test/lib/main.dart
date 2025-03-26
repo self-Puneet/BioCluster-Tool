@@ -71,10 +71,12 @@ class _HomePageState extends State<HomePage> {
     return result;
   }
 
-  bool isValidNucleotideSequence(String sequence) {
-    final regex = RegExp(r'^[ATCGatcg]+$');
-    return regex.hasMatch(sequence);
-  }
+  bool isValidBiologicalSequence(String sequence) {
+  // Allowed letters: A, T, C, G, U, N, R, D, Q, E, H, I, L, K, M, F, P, S, T, W, Y, V, B, Z, X
+  final regex = RegExp(r'^[ATCGUARNDCQEGHILKMFPSTWYVBZXatcguarndcqeghilkmfpstwyvbzx]+$');
+  return regex.hasMatch(sequence);
+}
+
 
   /// Modified: Retrieve the current data from dynamicFieldsKey (if available) and validate it.
   void validateAndProcessData() {
@@ -84,7 +86,7 @@ class _HomePageState extends State<HomePage> {
     } else if (resultText.isNotEmpty) {
       currentData = parseStringToMap(resultText);
     }
-    bool isValid = currentData.values.every(isValidNucleotideSequence);
+    bool isValid = currentData.values.every(isValidBiologicalSequence);
     // Retrieve the list of keys.
     List<String> keys =
         dynamicFieldsKey.currentState != null

@@ -28,7 +28,7 @@ class DynamicTextFieldsState extends State<DynamicTextFields> {
         entries.map((e) => TextEditingController(text: e.value)).toList();
     // Initialize validity for each entry using our validator.
     valueIsValid =
-        entries.map((e) => isValidNucleotideSequence(e.value)).toList();
+        entries.map((e) => isValidBiologicalSequence(e.value)).toList();
   }
 
   @override
@@ -72,10 +72,11 @@ List<String> getKeys() {
 
 
   /// Validator: returns true if [sequence] contains only A, T, C, or G (case-insensitive)
-  bool isValidNucleotideSequence(String sequence) {
-    final regex = RegExp(r'^[ATCGatcg]+$');
-    return regex.hasMatch(sequence);
-  }
+  bool isValidBiologicalSequence(String sequence) {
+  // Allowed letters: A, T, C, G, U, N, R, D, Q, E, H, I, L, K, M, F, P, S, T, W, Y, V, B, Z, X
+  final regex = RegExp(r'^[ATCGUARNDCQEGHILKMFPSTWYVBZXatcguarndcqeghilkmfpstwyvbzx]+$');
+  return regex.hasMatch(sequence);
+}
 
   /// Returns true if all value text fields contain valid nucleotide sequences.
   bool areAllSequencesValid() {
@@ -124,7 +125,7 @@ List<String> getKeys() {
                       setState(() {
                         // Update the value for the corresponding key.
                         entries[index] = MapEntry(entries[index].key, newValue);
-                        valueIsValid[index] = isValidNucleotideSequence(
+                        valueIsValid[index] = isValidBiologicalSequence(
                           newValue,
                         );
                       });
