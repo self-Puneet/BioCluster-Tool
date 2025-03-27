@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'popup.dart';
 import 'component.dart';
 import 'analysis_page.dart';
+import 'cluster_page.dart';
 
 // Dummy next page for demonstration
 class NextPage extends StatelessWidget {
@@ -72,11 +73,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   bool isValidBiologicalSequence(String sequence) {
-  // Allowed letters: A, T, C, G, U, N, R, D, Q, E, H, I, L, K, M, F, P, S, T, W, Y, V, B, Z, X
-  final regex = RegExp(r'^[ATCGUARNDCQEGHILKMFPSTWYVBZXatcguarndcqeghilkmfpstwyvbzx]+$');
-  return regex.hasMatch(sequence);
-}
-
+    // Allowed letters: A, T, C, G, U, N, R, D, Q, E, H, I, L, K, M, F, P, S, T, W, Y, V, B, Z, X
+    final regex = RegExp(
+      r'^[ATCGUARNDCQEGHILKMFPSTWYVBZXatcguarndcqeghilkmfpstwyvbzx]+$',
+    );
+    return regex.hasMatch(sequence);
+  }
 
   /// Modified: Retrieve the current data from dynamicFieldsKey (if available) and validate it.
   void validateAndProcessData() {
@@ -97,7 +99,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AnalysisPage(data: currentData, keys: keys),
+          builder: (context) => ClusterPage(data: currentData, keys: keys),
         ),
       );
     } else {

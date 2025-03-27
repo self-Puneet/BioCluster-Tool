@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('Agg') 
+import os
 import io
 import base64
 import matplotlib.pyplot as plt
@@ -5,6 +8,7 @@ import numpy as np
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # Import CORS
 from Bio import pairwise2  # Import Biopython's pairwise2 module
+import scipy.cluster.hierarchy as sch
 
 def calculate_similarity(seq1, seq2):
     """Calculate similarity percentage between two sequences using global alignment."""
@@ -39,12 +43,84 @@ def similarity():
     matrix = generate_similarity_matrix(sequences)
     return jsonify({"similarity_matrix": matrix})
 
-@app.route('/heatmap', methods=['POST'])
-def heatmap():
+# @app.route('/dendrogram', methods=['POST'])
+# def dendrogram():
+#     """
+#     This endpoint receives a JSON with a similarity matrix and keys,
+#     performs hierarchical clustering, creates a dendrogram image,
+#     and returns it as a base64 encoded string.
+#     """
+#     data = request.get_json()
+#     matrix = data.get("similarity_matrix", None)
+#     keys = data.get("keys", None)
+#     print(matrix)
+    
+#     if matrix is None:
+#         return jsonify({"error": "Missing similarity_matrix"}), 400
+    
+#     # Convert matrix to a NumPy array
+#     np_matrix = np.array(matrix)
+    
+#     # Perform hierarchical clustering
+#     linkage_matrix = sch.linkage(np_matrix, method='ward')
+    
+#     # Plot dendrogram
+#     plt.figure(figsize=(8, 6))
+#     sch.dendrogram(linkage_matrix, labels=keys, orientation='top', leaf_rotation=45)
+#     plt.title("Hierarchical Clustering Dendrogram")
+#     plt.xlabel("Samples")
+#     plt.ylabel("Distance")
+    
+#     # Save plot to buffer
+#     buf = io.BytesIO()
+#     plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0.2)
+
+#     plt.clf()  # Clears the figure to free memory
+#     plt.close('all')  # Ensures all figures are closed
+#     buf.seek(0)
+#     image_base64 = base64.b64encode(buf.read()).decode('utf-8')
+#     plt.close()
+    
+#     return jsonify({"dendrogram_image": image_base64})
+
+
+# @app.route('/heatmap', methods=['POST'])
+# def heatmap():
+#     """
+#     This endpoint receives a JSON with a similarity matrix and keys,
+#     creates a heatmap image with the keys as x and y axis labels,
+#     annotates each cell with its value, and returns it as a base64 encoded string.
+#     """
+#     data = request.get_json()
+#     matrix = data.get("similarity_matrix", None)
+#     keys = data.get("keys", None)
+    
+#     if matrix is None:
+#         return jsonify({"error": "Missing similarity_matrix"}), 400
+
+#     # Convert matrix to a NumPy array for plotting.
+#     np_matrix = np.array(matrix)
+
+#     plt.figure(figsize=(6, 6))
+#     plt.imshow(np_matrix, cmap='plasma', interpolation='nearest')
+#     plt.clim(0, 100)  # Set the color scale to range between 0 and 100.
+#     plt.colorbar()
+#     if keys is not None:
+#         plt.xticks(range(len(keys)), keys, rotation=45)
+#         plt.yticks(range(len(keys)), keys)
+#     plt.title("Confusion Matrix")
+
+#     buf = io.BytesIO()
+#     plt.savefig(buf, format='png', bbox_inches='tight')
+#     buf.seek(0)
+#     image_base64 = base64.b64encode(buf.read()).decode('utf-8')
+#     plt.close()
+
+#     return jsonify({"heatmap_image": image_base64})
+@app.route('/dendrogram', methods=['POST'])
+def dendrogram():
     """
-    This endpoint receives a JSON with a similarity matrix and keys,
-    creates a heatmap image with the keys as x and y axis labels,
-    annotates each cell with its value, and returns it as a base64 encoded string.
+    Generates a dendrogram image and saves it in the 'generated_images' folder.
     """
     data = request.get_json()
     matrix = data.get("similarity_matrix", None)
@@ -52,36 +128,101 @@ def heatmap():
     
     if matrix is None:
         return jsonify({"error": "Missing similarity_matrix"}), 400
+    
+    np_matrix = np.array(matrix)
+    linkage_matrix = sch.linkage(np_matrix, method='ward')
+    
+    plt.figure(figsize=(8, 6))
+    sch.dendrogram(linkage_matrix, labels=keys, orientation='top', leaf_rotation=45)
+    plt.title("Hierarchical Clustering Dendrogram")
+    plt.xlabel("Samples")
+    plt.ylabel("Distance")
 
-    # Convert matrix to a NumPy array for plotting.
+    # Save the image to the directory
+    dendrogram_path = os.path.join("E:\BioCluster-Tool\images", "dendrogram.png")
+    plt.savefig(dendrogram_path, format='png', bbox_inches='tight', pad_inches=0.2)
+    
+    plt.clf()
+    plt.close('all')
+
+    return jsonify({"message": "Dendrogram saved successfully", "path": dendrogram_path})
+
+@app.route('/heatmap', methods=['POST'])
+def heatmap():
+    """
+    Generates a heatmap image and saves it in the 'generated_images' folder.
+    """
+    data = request.get_json()
+    matrix = data.get("similarity_matrix", None)
+    keys = data.get("keys", None)
+
+    if matrix is None:
+        return jsonify({"error": "Missing similarity_matrix"}), 400
+
     np_matrix = np.array(matrix)
 
     plt.figure(figsize=(6, 6))
     plt.imshow(np_matrix, cmap='plasma', interpolation='nearest')
-    plt.clim(0, 100)  # Set the color scale to range between 0 and 100.
+    plt.clim(0, 100)
     plt.colorbar()
+
     if keys is not None:
         plt.xticks(range(len(keys)), keys, rotation=45)
         plt.yticks(range(len(keys)), keys)
+    
     plt.title("Confusion Matrix")
 
-    # Annotate each cell with its value (formatted to one decimal place).
-    for i in range(np_matrix.shape[0]):
-        for j in range(np_matrix.shape[1]):
-            plt.text(
-                j, i, f"{np_matrix[i, j]:.1f}",
-                ha="center", va="center",
-                color="black", fontsize=12
-            )
+    # Save the image to the directory
+    heatmap_path = os.path.join("E:\BioCluster-Tool\images", "heatmap.png")
+    plt.savefig(heatmap_path, format='png', bbox_inches='tight')
 
-    # Save the plot to a BytesIO buffer.
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png', bbox_inches='tight')
-    buf.seek(0)
-    image_base64 = base64.b64encode(buf.read()).decode('utf-8')
-    plt.close()
+    plt.clf()
+    plt.close('all')
 
-    return jsonify({"heatmap_image": image_base64})
+    return jsonify({"message": "Heatmap saved successfully", "path": heatmap_path})
+from sklearn.cluster import AgglomerativeClustering
+
+@app.route('/cluster', methods=['POST'])
+def cluster():
+    """
+    This endpoint receives a confusion matrix (with percentage values), labels, 
+    and the number of clusters, then applies hierarchical clustering and returns 
+    a dictionary of clusters.
+    """
+    data = request.get_json()
+    matrix = data.get("confusion_matrix", None)
+    labels = data.get("labels", None)
+    num_clusters = data.get("num_clusters", None)
+
+    print(data, matrix, labels, num_clusters)
+
+    # Validate inputs
+    if matrix is None or labels is None or num_clusters is None:
+        return jsonify({"error": "Missing confusion_matrix, labels, or num_clusters"}), 400
+    if len(matrix) != len(labels):
+        return jsonify({"error": "Matrix size does not match label count"}), 400
+    if num_clusters < 1 or num_clusters > len(labels):
+        return jsonify({"error": "Invalid number of clusters"}), 400
+
+    # Convert matrix to a NumPy array and normalize it (assuming values are in percentage)
+    np_matrix = np.array(matrix) / 100.0
+
+    # Convert normalized similarity matrix to a distance matrix
+    dist_matrix = 1 - np_matrix
+
+    # Perform hierarchical clustering
+    clustering = AgglomerativeClustering(n_clusters=num_clusters, metric='precomputed', linkage='average')
+    cluster_labels = clustering.fit_predict(dist_matrix)
+
+    # Organize clusters into dictionary
+    cluster_dict = {}
+    for i, cluster in enumerate(cluster_labels):
+        cluster_name = f"cluster{cluster + 1}"
+        if cluster_name not in cluster_dict:
+            cluster_dict[cluster_name] = []
+        cluster_dict[cluster_name].append(labels[i])
+    print(cluster_dict)
+    return jsonify(cluster_dict)
 
 if __name__ == '__main__':
     app.run(debug=True)
