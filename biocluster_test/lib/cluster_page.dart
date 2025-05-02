@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'dart:html' as html;
-import 'package:biocluster_test/carousel.dart';
 
 class ClusterPage extends StatefulWidget {
   final Map<String, String> data;
@@ -53,35 +52,6 @@ class _ClusterPageState extends State<ClusterPage> {
             )
             .toList();
 
-    // Step 2: Upload images (Heatmap & Dendrogram)
-    await Future.wait([
-      http.post(
-        Uri.parse("http://127.0.0.1:5000/heatmap"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "similarity_matrix": similarityMatrix,
-          "keys": widget.keys,
-        }),
-      ),
-      http.post(
-        Uri.parse("http://127.0.0.1:5000/dendrogram"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "similarity_matrix": similarityMatrix,
-          "keys": widget.keys,
-        }),
-      ),
-    ]);
-
-    // Step 3: Show Snackbar (Images Uploaded)
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Images successfully uploaded!"),
-          backgroundColor: Colors.green,
-        ),
-      );
-    }
 
     // Step 4: Fetch Clusters using the user-specified number
     final clusterResponse = await http.post(
