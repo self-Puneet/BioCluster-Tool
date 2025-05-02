@@ -2,6 +2,9 @@
 
 **BioCluster Tool** is a modern, Flutter-based web interface designed for the **analysis and clustering of nucleotide sequences**. Built to work seamlessly with a FastAPI backend, it brings user-friendly bioinformatics to researchers, students, and developers.
 
+![screenshot](assets/screenshorts/input_sequence.png)
+![screenshot](assets/screenshorts/clustering.png)
+
 ---
 
 ## 🗂 Project Structure
@@ -41,7 +44,7 @@ Follow these steps to run the app locally:
 ### Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/self-Puneet/BioCluster-Tool
 ```
 
 ### Frontend Setup
