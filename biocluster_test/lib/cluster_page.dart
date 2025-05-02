@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'dart:html' as html;
+import 'package:biocluster_test/carousel.dart';
 
 class ClusterPage extends StatefulWidget {
   final Map<String, String> data;
@@ -167,6 +168,14 @@ class _ClusterPageState extends State<ClusterPage> {
     }
   }
 
+  List<String> imagePaths = [
+    "image/gaussian.png",
+    "image/imagedendrogram.png",
+    "image/imageheatmap.png",
+  ];
+
+  List<String> graphNames = ["Gaussian Graph", "Dendrogram", "Heatmap"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,6 +215,7 @@ class _ClusterPageState extends State<ClusterPage> {
       body: Column(
         children: [
           // Input panel for number of clusters
+          // CarouselWidget(imagePaths: imagePaths, graphNames: graphNames),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -246,7 +256,9 @@ class _ClusterPageState extends State<ClusterPage> {
               future: clustersFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator(color: Colors.orange,));
+                  return Center(
+                    child: CircularProgressIndicator(color: Colors.orange),
+                  );
                 } else if (snapshot.hasError ||
                     snapshot.data == null ||
                     snapshot.data!.isEmpty) {
@@ -301,7 +313,7 @@ class _ClusterPageState extends State<ClusterPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _downloadClusters,
-        child: Icon(Icons.download,color: Colors.white,),
+        child: Icon(Icons.download, color: Colors.white),
         backgroundColor: Colors.orange,
       ),
     );

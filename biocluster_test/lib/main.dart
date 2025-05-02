@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'popup.dart';
 import 'component.dart';
-import 'analysis_page.dart';
+// import 'analysis_page.dart';
 import 'cluster_page.dart';
 
 // Dummy next page for demonstration

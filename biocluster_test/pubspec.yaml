@@ -41,6 +41,7 @@ dependencies:
   fl_chart: ^0.70.2
   path_provider: ^2.1.5
   html: ^0.15.5
+  carousel_slider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,9 @@ flutter:
 
   assets:
     - assets\ndg_logo.jpg
+    - image\gaussian.png
+    - image\imagedendrogram.png
+    - image\imageheatmap.png
   
   # To add assets to your application, add an assets section, like this:
   # assets:
