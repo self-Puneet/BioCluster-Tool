@@ -1,6 +1,6 @@
 # 🧬 BioCluster Tool – Interactive Bioinformatics Web App
 
-**BioCluster Tool** is a modern, Flutter-based web interface designed for the **analysis and clustering of nucleotide sequences**. Built to work seamlessly with a FastAPI backend, it brings user-friendly bioinformatics to researchers, students, and developers.
+**BioCluster Tool** is an interactive, web-based platform for the analysis and clustering of nucleotide sequences. Featuring a modern Flutter frontend and a robust FastAPI backend, it enables users to easily upload, analyze, and visualize biological sequence data. The tool supports intuitive clustering workflows, making advanced bioinformatics accessible to researchers, students, and developers—no deep programming or command-line experience required. BioCluster Tool streamlines sequence analysis, helping users gain insights from their data quickly and efficiently.
 
 ![screenshot](biocluster_test/assets/screenshorts/input_sequence.png)
 ![screenshot](biocluster_test/assets/screenshorts/clustering.png)
@@ -23,12 +23,6 @@ BioCluster-Tool/
 │   ├── utils/                # Utility functions for sequence analysis
 │   ├── pyproject.toml        # Python dependencies and metadata
 │   └── README.md             # Backend-specific documentation
-├── web/                      # Built Flutter web app for deployment
-│   ├── index.html            # Entry point for the web app
-│   ├── main.dart.js          # Compiled Dart code
-│   ├── assets/               # Static assets for the web app
-│   ├── icons/                # App icons
-│   └── manifest.json         # Web app manifest
 ├── README.md                 # Main project documentation
 ├── LICENSE                   # License information
 └── sequences.txt             # Example input file for sequences
@@ -47,22 +41,6 @@ Follow these steps to run the app locally:
 git clone https://github.com/self-Puneet/BioCluster-Tool
 ```
 
-### Frontend Setup
-
-Once you have built the Flutter web app, a `web` folder will be generated in the root directory. Follow these steps to serve the web app locally:
-
-1. Ensure you have Node.js installed on your system. If not, download and install it from [Node.js Official Website](https://nodejs.org/).
-2. Install the `serve` package globally using npm:
-   ```bash
-   npm install -g serve
-   ```
-3. Navigate to the root directory of the project where the `web` folder is located.
-4. Serve the web app using the `serve` command:
-   ```bash
-   serve web
-   ```
-5. Open your browser and go to the URL provided by the `serve` command (e.g., `http://localhost:5000`) to view the web app.
-
 ### Backend Setup
 
 ```bash
@@ -77,6 +55,10 @@ uvicorn main:app --reload
 ```
 
 > ⚠️ **Make sure the backend server is running** (see backend setup above).
+
+---
+
+Once your backend is running locally, you can access the BioCluster Tool frontend by visiting the hosted web app at [https://biocluster-tool.netlify.app/](https://biocluster-tool.netlify.app/).
 
 ---
 
