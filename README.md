@@ -1,6 +1,6 @@
 # 🧬 BioCluster Tool – Interactive Bioinformatics Web App
 
-**BioCluster Tool** is an interactive, web-based platform for the analysis and clustering of nucleotide sequences. Featuring a modern Flutter frontend and a robust FastAPI backend, it enables users to easily upload, analyze, and visualize biological sequence data. The tool supports intuitive clustering workflows, making advanced bioinformatics accessible to researchers, students, and developers—no deep programming or command-line experience required. BioCluster Tool streamlines sequence analysis, helping users gain insights from their data quickly and efficiently.
+**BioCluster Tool** is an interactive, web-based platform for the analysis and clustering of nucleotide sequences. Featuring a modern Flutter frontend and a robust Flask API backend, it enables users to easily upload, analyze, and visualize biological sequence data. The tool supports intuitive clustering workflows, making advanced bioinformatics accessible to researchers, students, and developers—no deep programming or command-line experience required. BioCluster Tool streamlines sequence analysis, helping users gain insights from their data quickly and efficiently.
 
 ![screenshot](biocluster_test/assets/screenshorts/input_sequence.png)
 ![screenshot](biocluster_test/assets/screenshorts/clustering.png)
