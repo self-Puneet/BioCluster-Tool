@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'venv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:html' as html;
 
@@ -34,7 +35,7 @@ class _ClusterPageState extends State<ClusterPage> {
 
     // Step 1: Get similarity matrix
     final similarityResponse = await http.post(
-      Uri.parse("http://127.0.0.1:5000/similarity"),
+      Uri.parse("$API_URL/similarity"),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({"sequences": sequences}),
     );
@@ -52,10 +53,9 @@ class _ClusterPageState extends State<ClusterPage> {
             )
             .toList();
 
-
     // Step 4: Fetch Clusters using the user-specified number
     final clusterResponse = await http.post(
-      Uri.parse("http://127.0.0.1:5000/cluster"),
+      Uri.parse("$API_URL/cluster"),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "confusion_matrix": similarityMatrix,
