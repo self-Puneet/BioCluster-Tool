@@ -15,4 +15,4 @@ if __name__ == '__main__':
     matplotlib.use('Agg')  # For headless server environments
 
     app = create_app()
-    app.run(debug=True)
+    app.run(debug=False)
